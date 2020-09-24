@@ -309,6 +309,14 @@ class webull:
         if orderType == 'MKT':
             data['outsideRegularTradingHour'] = False
 
+        # Check if the order is a LMT or stop order
+        if orderType == 'LMT':
+            data['lmtPrice'] = float(price)
+        elif orderType == 'STP':
+            data['auxPrice'] = float(price)
+
+        print(data)
+
         response = requests.post(self._urls.place_orders(self._account_id), json=data, headers=headers)
         return response.json()
 
@@ -932,14 +940,6 @@ class paper_webull(webull):
         #Market orders do not support extended hours trading.
         if orderType == 'MKT':
             data['outsideRegularTradingHour'] = False
-
-        # Check if the order is a LMT or stop order
-        if orderType == 'LMT':
-            data['lmtPrice'] = float(price)
-        elif orderType == 'STP':
-            data['auxPrice'] = float(price)
-
-        print(data)
 
         response = requests.post(self._urls.paper_place_order(self._account_id, tId), json=data, headers=headers)
         return response.json()
