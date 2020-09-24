@@ -921,7 +921,6 @@ class paper_webull(webull):
 
         data = {
             'action': action, #  BUY or SELL
-            'lmtPrice': float(price),
             'orderType': orderType, # 'LMT','MKT'
             'outsideRegularTradingHour': True,
             'quantity': int(quant),
@@ -934,6 +933,14 @@ class paper_webull(webull):
         if orderType == 'MKT':
             data['outsideRegularTradingHour'] = False
 
+        # Check if the order is a LMT or stop order
+        if orderType == 'LMT':
+            data['lmtPrice'] = float(price)
+        elif orderType == 'STP':
+            data['auxPrice'] = float(price)
+
+        print(data)
+
         response = requests.post(self._urls.paper_place_order(self._account_id, tId), json=data, headers=headers)
         return response.json()
 
@@ -943,7 +950,6 @@ class paper_webull(webull):
 
         data = {
             'action': action, #  BUY or SELL
-            'lmtPrice': float(price),
             'orderType':orderType,
             'comboType': 'NORMAL', # 'LMT','MKT'
             'outsideRegularTradingHour': True,
@@ -956,6 +962,12 @@ class paper_webull(webull):
             data['quantity'] = order['totalQuantity']
         else:
             data['quantity'] = int(quant)
+
+        # Check if the order is a LMT or stop order
+        if orderType == 'LMT':
+            data['lmtPrice'] = float(price)
+        elif orderType == 'STP':
+            data['auxPrice'] = float(price)
 
         response = requests.post(self._urls.paper_modify_order(self._account_id, order['orderId']), json=data,
                                  headers=headers)
