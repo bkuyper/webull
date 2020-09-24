@@ -12,7 +12,7 @@ setuptools.setup(
     author_email="ted.chou12@gmail.com",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/tedchou12/webull.git",
+    url="https://github.com/bkuyper/webull.git",
     packages=setuptools.find_packages(),
     install_requires=[
         "certifi>=2020.4.5.1",
