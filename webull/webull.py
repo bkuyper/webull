@@ -343,7 +343,6 @@ class webull:
 
         data = {
             'action': modifiedAction,
-            'lmtPrice': modifiedLmtPrice,
             'orderType': modifiedOrderType,
             'quantity': modifiedQuant,
             'comboType': 'NORMAL',
@@ -355,6 +354,12 @@ class webull:
         #Market orders do not support extended hours trading.
         if data['orderType'] == 'MKT':
             data['outsideRegularTradingHour'] = False
+
+        # Check if the order is a LMT or stop order
+        if orderType == 'LMT':
+            data['lmtPrice'] = float(modifiedLmtPrice)
+        elif orderType == 'STP':
+            data['auxPrice'] = float(price)
 
         response = requests.put(self._urls.modify_order(self._account_id, order['orderId']), json=data, headers=headers)
 
