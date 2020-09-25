@@ -314,8 +314,6 @@ class webull:
         elif orderType == 'STP':
             data['auxPrice'] = float(price)
 
-        print(data)
-
         response = requests.post(self._urls.place_orders(self._account_id), json=data, headers=headers)
         return response.json()
 
