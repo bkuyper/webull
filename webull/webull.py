@@ -296,7 +296,6 @@ class webull:
         headers = self.build_req_headers(include_trade_token=True, include_time=True)
         data = {
             'action': action,
-            'lmtPrice': float(price),
             'orderType': orderType,
             'outsideRegularTradingHour': outsideRegularTradingHour,
             'quantity': int(qty),
