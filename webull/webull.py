@@ -347,9 +347,10 @@ class webull:
             'outsideRegularTradingHour': modifiedOutsideRegularTradingHour,
             'serialId': str(uuid.uuid4()),
             'tickerId': order['ticker']['tickerId'],
-            'timeInForce': modifiedEnforce
+            'timeInForce': modifiedEnforce,
+            'orderId':  order['orderId']
         }
-        #Market orders do not support extended hours trading.
+        # Market orders do not support extended hours trading.
         if data['orderType'] == 'MKT':
             data['outsideRegularTradingHour'] = False
 
