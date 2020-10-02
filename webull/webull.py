@@ -414,6 +414,27 @@ class webull:
             print(result1['checkResultList'][0]['msg'])
             return False
 
+    def place_oco_order(self, stock='', action='', stop_loss_price='', limit_profit_price='',
+        time_in_force='DAY', quant=0):
+        '''
+        OCO: One-cancels-the-others, aka Bracket Ordering
+        If one sell fills, it will cancel the other
+         sell
+        '''
+        headers = self.build_req_headers(include_trade_token=False, include_time=True)
+        data = {
+            'newOrders': [
+                {'orderType': 'STP', 'timeInForce': time_in_force, 'quantity': int(quant),
+                 'outsideRegularTradingHour': False, 'action': action, 'tickerId': self.get_ticker(stock),
+                 'auxPrice': float(stop_loss_price), 'comboType': 'OCO', 'serialId': str(uuid.uuid4())},
+                {'orderType': 'LMT', 'timeInForce': time_in_force, 'quantity': int(quant),
+                 'outsideRegularTradingHour': False, 'action': action, 'tickerId': self.get_ticker(stock),
+                 'lmtPrice': float(limit_profit_price), 'comboType': 'OCO', 'serialId': str(uuid.uuid4())}],
+            'serialId': str(uuid.uuid4())
+        }
+
+        response = requests.post(self._urls.place_otoco_orders(self._account_id), json=data, headers=headers)
+        return response.json()
 
     def cancel_order(self, order_id=''):
         '''
