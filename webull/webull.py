@@ -275,8 +275,7 @@ class webull:
             raise ValueError('Stock symbol is required')
         return ticker_id
 
-
-    def place_order(self, stock=None, tId=None, price=0, action='BUY',
+    def place_order(self, stock=None, tId=None, price=0, stp_price=0, action='BUY',
             orderType='LMT', enforce='GTC', qty=0, outsideRegularTradingHour=True):
         '''
         Place an order
@@ -312,13 +311,16 @@ class webull:
         if orderType == 'LMT':
             data['lmtPrice'] = float(price)
         elif orderType == 'STP':
-            data['auxPrice'] = float(price)
+            data['auxPrice'] = float(stp_price)
+        elif orderType == 'STP LMT':
+            data['lmtPrice'] = float(price)
+            data['auxPrice'] = float(stp_price)
 
         response = requests.post(self._urls.place_orders(self._account_id), json=data, headers=headers)
         return response.json()
 
 
-    def modify_order(self, order=None, price=0, action=None, orderType=None, enforce=None, quant=0, outsideRegularTradingHour=None):
+    def modify_order(self, order=None, price=0, stp_price=0, action=None, orderType=None, enforce=None, quant=0, outsideRegularTradingHour=None):
         '''
         Modify an order
 
@@ -358,7 +360,10 @@ class webull:
         if orderType == 'LMT':
             data['lmtPrice'] = float(modifiedLmtPrice)
         elif orderType == 'STP':
-            data['auxPrice'] = float(price)
+            data['auxPrice'] = float(stp_price)
+        elif orderType == 'STP LMT':
+            data['lmtPrice'] = float(price)
+            data['auxPrice'] = float(stp_price)
 
         response = requests.put(self._urls.modify_order(self._account_id, order['orderId']), json=data, headers=headers)
 
