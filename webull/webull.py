@@ -276,7 +276,7 @@ class webull:
         return ticker_id
 
     def place_order(self, stock=None, tId=None, price=0, stp_price=0, action='BUY',
-            orderType='LMT', enforce='GTC', qty=0, outsideRegularTradingHour=True):
+            orderType='LMT', enforce='DAY', qty=0, outsideRegularTradingHour=False):
         '''
         Place an order
 
